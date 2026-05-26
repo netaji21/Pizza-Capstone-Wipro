@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Login - Pizza Store</title>
+</head>
+<body>
+<h1>Admin Login</h1>
+
+<form th:action="@{/admin/login}" method="post">
+    <label>Email:</label>
+    <input type="email" name="email" /><br/>
+
+    <label>Password:</label>
+    <input type="password" name="password" /><br/>
+
+    <button type="submit">Login</button>
+</form>
+
+<p th:if="${error}" th:text="${error}" style="color:red;"></p>
+</body>
+</html>
+<head>
+    <title>Customer Login - Pizza Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: 40px auto;
+        }
+        h1 { text-align: center; }
+        label { display: block; margin-top: 10px; }
+        input { width: 100%; padding: 6px; }
+        button {
+            margin-top: 15px;
+            padding: 8px 16px;
+            width: 100%;
+        }
+        a { display: block; margin-top: 10px; text-align: center; }
+    </style>
+</head>
+

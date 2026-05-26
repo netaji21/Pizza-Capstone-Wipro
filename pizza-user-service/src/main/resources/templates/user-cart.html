@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Cart</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<header>
+    <h1>🍕 Pizza Store</h1>
+    <nav>
+        <a href="/customers/home">Home</a>
+        <a href="/customers/menu">Menu</a>
+        <a href="/customers/cart" style="text-decoration: underline;">Cart</a>
+        <a href="/customers/logout">Logout</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h2>Your Cart</h2>
+
+    <div th:if="${error}" class="alert alert-error" th:text="${error}">Error</div>
+    <div th:if="${msg}" class="alert alert-success" th:text="${msg}">Success</div>
+
+    <div th:if="${#lists.isEmpty(cart.items)}" class="card" style="text-align:center; padding: 50px;">
+        <h3>Your cart is empty</h3>
+        <p>Looks like you haven't added any pizzas yet.</p>
+        <a href="/customers/menu" class="btn btn-primary" style="margin-top:15px;">Start Ordering</a>
+    </div>
+
+    <div th:if="${!#lists.isEmpty(cart.items)}" style="display: flex; gap: 30px; flex-wrap: wrap;">
+        
+        <div style="flex: 2; min-width: 300px;">
+            <table class="styled-table">
+                <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="it : ${cart.items}">
+                    <td>
+                        <strong th:text="${it.name}">Pizza Name</strong>
+                    </td>
+                    <td>₹<span th:text="${it.price}">0.00</span></td>
+                    <td>
+                        <div style="display:flex; align-items:center; gap:5px;">
+                            <form method="post" th:action="@{/customers/cart/decrease}" style="margin:0;">
+                                <input type="hidden" name="itemId" th:value="${it.menuItemId}" />
+                                <button type="submit" class="btn btn-secondary" style="padding: 2px 8px;">-</button>
+                            </form>
+                            <span th:text="${it.quantity}" style="font-weight:bold; min-width:20px; text-align:center;">1</span>
+                            <form method="post" th:action="@{/customers/cart/increase}" style="margin:0;">
+                                <input type="hidden" name="itemId" th:value="${it.menuItemId}" />
+                                <button type="submit" class="btn btn-secondary" style="padding: 2px 8px;">+</button>
+                            </form>
+                        </div>
+                    </td>
+                    <td>₹<span th:text="${it.lineTotal}">0.00</span></td>
+                    <td>
+                        <form method="post" th:action="@{/customers/cart/remove}" style="margin:0;">
+                            <input type="hidden" name="itemId" th:value="${it.menuItemId}" />
+                            <button type="submit" style="background:none; border:none; color:red; cursor:pointer; font-weight:bold;">✕</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="flex: 1; min-width: 280px;">
+            <div class="card">
+                <h3>Order Summary</h3>
+                <div style="display:flex; justify-content:space-between; margin-bottom: 20px; font-size: 18px;">
+                    <strong>Grand Total:</strong>
+                    <strong style="color: var(--primary-blue);">₹<span th:text="${cartTotal}">0.00</span></strong>
+                </div>
+
+                <form method="post" th:action="@{/customers/cart/checkout}">
+                    <label>Delivery Method</label>
+                    <select name="deliveryMode">
+                        <option value="DELIVERY">Home Delivery</option>
+                        <option value="PICKUP">Takeaway / Pickup</option>
+                    </select>
+
+                    <label>Payment Method</label>
+                    <select name="paymentMode">
+                        <option value="CASH">Cash on Delivery</option>
+                        <option value="CARD">Credit/Debit Card</option>
+                        <option value="UPI">UPI / GPay</option>
+                    </select>
+
+                    <button type="submit" class="btn btn-success btn-block" style="font-size: 16px; padding: 12px;">PROCEED TO CHECKOUT</button>
+                </form>
+                
+                <a href="/customers/menu" class="btn btn-secondary btn-block" style="margin-top: 10px;">Add More Items</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>&copy; 2025 Pizza Store</footer>
+</body>
+</html>

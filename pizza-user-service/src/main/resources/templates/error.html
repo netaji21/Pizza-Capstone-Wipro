@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Something went wrong</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#fafafa; margin:0; padding:0; }
+    header { background:#1976d2; color:#fff; padding:12px 16px; }
+    .container { max-width:800px; margin:40px auto; background:#fff; padding:20px; box-shadow:0 0 8px rgba(0,0,0,0.1); }
+    h1 { margin:0 0 10px 0; color: #d32f2f; }
+    p { color:#333; }
+    .error-message { background: #ffebee; padding: 10px; border-left: 5px solid #d32f2f; margin: 15px 0; color: #b71c1c; }
+    .links a { display:inline-block; margin-top:12px; padding:8px 12px; background:#1976d2; color:#fff; text-decoration:none; border-radius:4px; }
+  </style>
+</head>
+<body>
+<header><h2>Pizza Store — Error</h2></header>
+<div class="container">
+  <h1>Oops — something went wrong</h1>
+  <p>We could not complete your request.</p>
+  
+  <div th:if="${error}" class="error-message">
+      <strong>Details:</strong> <span th:text="${error}">Unknown Error</span>
+  </div>
+
+  <div class="links">
+    <a href="/customers/home">Return to Home</a>
+    <a href="/customers/menu" style="margin-left:8px;">Browse Menu</a>
+  </div>
+</div>
+</body>
+</html>

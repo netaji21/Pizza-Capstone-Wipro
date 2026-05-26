@@ -1,0 +1,70 @@
+# --- Maven build output -------------------------------------------------------
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+
+# --- Spring Boot --------------------------------------------------------------
+*.log
+spring.log
+logs/
+
+# --- IDE files (should never be in a repo) -----------------------------------
+# Eclipse
+.metadata/
+.project
+.classpath
+.settings/
+.factorypath
+.apt_generated/
+bin/
+.eclipse/
+.recommenders/
+
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# NetBeans
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+# --- Linters / tools ----------------------------------------------------------
+.sonarlint/
+.sonarcloud.properties
+.checkstyle
+.pmd
+
+# --- OS files ----------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+*~
+*.swp
+
+# --- Secrets and local-only configs ------------------------------------------
+# Never commit real credentials. Use environment variables instead - see README.
+.env
+.env.local
+.env.*.local
+application-local.properties
+application-secrets.properties
+
+# --- Maven wrapper temp files -------------------------------------------------
+.mvn/wrapper/maven-wrapper.jar
+
+# --- Database files (H2 file mode, in case anyone switches to non-memory) -----
+*.mv.db
+*.trace.db
+*.h2.db

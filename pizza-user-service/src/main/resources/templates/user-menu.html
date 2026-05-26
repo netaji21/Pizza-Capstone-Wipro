@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pizza Menu</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        /* Floating Cart Button override */
+        .floating-cart {
+            position: fixed; bottom: 30px; right: 30px; 
+            background-color: var(--primary-red); color: white;
+            padding: 15px 25px; border-radius: 50px; 
+            box-shadow: 0 6px 16px rgba(227, 24, 55, 0.4);
+            text-decoration: none; font-weight: 700; font-size: 16px; z-index: 9999;
+            display: flex; align-items: center; gap: 10px;
+            transition: transform 0.2s;
+        }
+        .floating-cart:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🍕 Pizza Store</h1>
+    <nav>
+        <a href="/customers/home">Home</a>
+        <a href="/customers/menu" style="text-decoration: underline;">Menu</a>
+        <a href="/customers/orders">My Orders</a>
+        <a href="/customers/cart">Cart</a>
+        <a href="/customers/logout">Logout</a>
+    </nav>
+</header>
+
+<div class="container">
+    
+    <form method="get" action="/customers/menu" class="filter-bar">
+        <input type="text" name="keyword" placeholder="Search pizza, sides..." th:value="${keyword}">
+        
+        <select name="category">
+            <option value="">All Categories</option>
+            <option value="Pizza" th:selected="${selectedCategory == 'Pizza'}">Pizza</option>
+            <option value="Sides" th:selected="${selectedCategory == 'Sides'}">Sides</option>
+            <option value="Beverages" th:selected="${selectedCategory == 'Beverages'}">Beverages</option>
+            <option value="Combo" th:selected="${selectedCategory == 'Combo'}">Combos</option>
+        </select>
+
+        <select name="veg">
+            <option value="">All Types</option>
+            <option value="true" th:selected="${isVeg == true}">Veg Only</option>
+            <option value="false" th:selected="${isVeg == false}">Non-Veg Only</option>
+        </select>
+
+        <select name="sort">
+            <option value="">Sort By</option>
+            <option value="asc" th:selected="${selectedSort == 'asc'}">Price: Low to High</option>
+            <option value="desc" th:selected="${selectedSort == 'desc'}">Price: High to Low</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary">Apply Filters</button>
+        <a href="/customers/menu" class="btn btn-secondary">Reset</a>
+    </form>
+
+    <div th:if="${param.msg}" class="alert alert-success" th:text="${param.msg}">Success</div>
+    <div th:if="${param.error}" class="alert alert-error" th:text="${param.error}">Error</div>
+
+    <div th:if="${categorizedMenu.empty}" class="card" style="text-align:center; padding: 50px;">
+        <h3>No items found 😔</h3>
+        <p>Try changing your filters or search keyword.</p>
+        <a href="/customers/menu" class="btn btn-primary">View Full Menu</a>
+    </div>
+
+    <div th:each="entry : ${categorizedMenu}">
+        <h2 style="color: var(--primary-blue); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 40px;" 
+            th:text="${entry.key}">Category Name</h2>
+        
+        <div class="menu-grid">
+            <div class="menu-item-card" th:each="item : ${entry.value}">
+                <div style="height: 150px; background: #eee; display: flex; align-items: center; justify-content: center; color: #aaa;">
+                    <span style="font-size: 40px;">🍕</span>
+                </div>
+
+                <div class="menu-item-body">
+                    <h3 class="menu-item-title" th:text="${item.name}">Pizza Name</h3>
+                    
+                    <div style="margin-bottom: 10px;">
+                        <span th:if="${item.veg}" class="badge badge-veg">VEG</span>
+                        <span th:if="${!item.veg}" class="badge badge-nonveg">NON-VEG</span>
+                        <span th:if="${item.size != null}" class="badge" style="background:#eee; color:#555;" th:text="${item.size}">Size</span>
+                    </div>
+
+                    <p class="menu-item-desc" th:text="${item.description}">Description goes here...</p>
+
+                    <div class="menu-item-footer">
+                        <span class="price-tag">₹<span th:text="${item.price}">0.00</span></span>
+                        
+                        <form method="post" th:action="@{/customers/cart/add}" th:if="${item.available}">
+                            <input type="hidden" name="itemId" th:value="${item.id}" />
+                            <input type="hidden" name="quantity" value="1" />
+                            <button type="submit" class="btn btn-success btn-sm">ADD +</button>
+                        </form>
+                        <button th:if="${!item.available}" class="btn btn-secondary" disabled>SOLD OUT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<a href="/customers/cart" class="floating-cart">
+    <span>🛒</span> View Cart
+</a>
+
+<footer>
+    &copy; 2025 Pizza Store - Deliciously Delivered.
+</footer>
+</body>
+</html>

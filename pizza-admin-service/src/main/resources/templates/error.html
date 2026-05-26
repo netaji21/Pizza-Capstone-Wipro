@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error - Pizza Admin</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #fafafa; padding: 50px; text-align: center; }
+        .error-box { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); display: inline-block; }
+        h1 { color: #d32f2f; }
+        p { color: #555; font-size: 16px; }
+        .error-msg { background: #ffebee; color: #b71c1c; padding: 10px; border: 1px solid #ffcdd2; border-radius: 4px; margin: 20px 0; }
+        a { color: #1976d2; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="error-box">
+        <h1>Oops! Something went wrong.</h1>
+        <p>An unexpected error occurred in the Admin Panel.</p>
+        
+        <div th:if="${error}" class="error-msg">
+            <strong>Error Details:</strong> <span th:text="${error}">Unknown Error</span>
+        </div>
+
+        <a href="/admin/home">Go to Admin Home</a>
+    </div>
+</body>
+</html>

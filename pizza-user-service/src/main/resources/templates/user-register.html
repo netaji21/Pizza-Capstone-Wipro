@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - Pizza Store</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<div class="container auth-box">
+    <div class="card">
+        <h2 style="text-align:center; color: var(--primary-blue);">Create Account</h2>
+        <p style="text-align:center; color: #666; margin-bottom: 30px;">Join us for exclusive deals</p>
+
+        <div th:if="${param.error}" class="alert alert-error" th:text="${param.error}">Error</div>
+
+        <form onsubmit="return validateRegistration(this)" method="post" th:action="@{/customers/register}">
+            <label for="name">Full Name</label>
+            <input id="name" name="name" type="text" placeholder="John Doe" required />
+
+            <label for="email">Email Address</label>
+            <input id="email" name="email" type="email" placeholder="user@example.com" required />
+
+            <label for="phone">Phone Number</label>
+            <input id="phone" name="phone" type="text" placeholder="9876543210" />
+
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" minlength="6" placeholder="Min 6 characters" required />
+
+            <button class="btn btn-success btn-block" type="submit">REGISTER</button>
+        </form>
+
+        <div style="text-align:center; margin-top:20px; font-size:14px;">
+            Already have an account? <a th:href="@{/customers/login}" style="color:var(--primary-blue); font-weight:bold;">Login</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function validateRegistration(form) {
+        // Basic JS validation
+        return true; 
+    }
+</script>
+</body>
+</html>

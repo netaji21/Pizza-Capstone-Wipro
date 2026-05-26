@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - Pizza Store</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<header>
+    <h1>🍕 Pizza Store</h1>
+    <nav>
+        <a href="/customers/home" style="text-decoration: underline;">Home</a>
+        <a href="/customers/menu">Menu</a>
+        <a href="/customers/cart">Cart</a>
+        <a href="/customers/orders">My Orders</a>
+        <a href="/customers/logout">Logout</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="card">
+        <h2>Welcome, <span th:text="${customer.name}" style="color: var(--primary-blue);">User</span>!</h2>
+        <p style="color: #666;">Ready to order some delicious pizza?</p>
+        
+        <div style="display:flex; gap: 20px; margin-top: 20px;">
+            <a href="/customers/menu" class="btn btn-primary">Browse Menu</a>
+            <a href="/customers/orders" class="btn btn-secondary">View Past Orders</a>
+        </div>
+    </div>
+
+    <div class="card" style="margin-top: 20px;">
+        <h3>My Profile</h3>
+        <p><strong>Email:</strong> <span th:text="${customer.email}"></span></p>
+        <p><strong>Phone:</strong> <span th:text="${customer.phone}"></span></p>
+        <p><strong>Address:</strong> <span th:text="${customer.address}"></span></p>
+    </div>
+</div>
+
+<footer>&copy; 2025 Pizza Store</footer>
+</body>
+</html>

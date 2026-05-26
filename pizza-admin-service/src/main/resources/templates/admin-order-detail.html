@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Detail - Admin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafafa;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #d32f2f;
+            color: #ffffff;
+            padding: 15px 20px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        nav a {
+            color: #ffffff;
+            margin-right: 15px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .order-info p {
+            margin: 4px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f5f5f5;
+        }
+
+        .total-row td {
+            font-weight: bold;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        .status-COMPLETED {
+            color: #2e7d32;
+        }
+
+        .status-CANCELLED {
+            color: #d32f2f;
+        }
+
+        .status-NEW {
+            color: #1976d2;
+        }
+
+        .actions {
+            margin-top: 15px;
+        }
+
+        .actions form {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .actions button {
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: #ffffff;
+        }
+
+        .btn-complete {
+            background-color: #388e3c;
+        }
+
+        .btn-cancel {
+            background-color: #d32f2f;
+        }
+        
+        .btn-print {
+            background-color: #555;
+            color: white;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            display: inline-block;
+            cursor: pointer;
+            border: none;
+            margin-right: 10px;
+        }
+        
+        .btn-print:hover {
+            background-color: #333;
+        }
+
+        .btn-back {
+            background-color: #9e9e9e;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+        .payment-section {
+            margin-top: 20px;
+        }
+
+        footer {
+            margin-top: 20px;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #777777;
+        }
+
+        /* --- PRINT STYLES --- */
+        /* These rules apply ONLY when printing (or saving as PDF) */
+        @media print {
+            header, footer, .actions, .btn-back {
+                display: none !important;
+            }
+            body {
+                background-color: white;
+                margin: 0;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                margin: 0;
+                padding: 0;
+                max-width: 100%;
+                width: 100%;
+            }
+            h2::after {
+                content: " (INVOICE)";
+                font-size: 0.8em;
+                color: #555;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Pizza Store - Admin Panel</h1>
+    <nav>
+        <a href="/admin/home" th:href="@{/admin/home}">Home</a>
+        <a href="/admin/menu" th:href="@{/admin/menu}">Menu Management</a>
+        <a href="/admin/orders" th:href="@{/admin/orders}">Orders</a>
+        <a href="/admin/logout" th:href="@{/admin/logout}">Logout</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h2>Order Details</h2>
+
+    <div class="order-info">
+        <p><strong>Order Id:</strong> <span th:text="${order.id}">1</span></p>
+        <p><strong>Order Number:</strong> <span th:text="${order.orderNumber}">ORD-001</span></p>
+        <p><strong>Customer Id:</strong> <span th:text="${order.customerId}">1001</span></p>
+        <p><strong>Status:</strong>
+            <span class="status"
+                  th:text="${order.status}"
+                  th:classappend="' status-' + ${order.status}">
+                NEW
+            </span>
+        </p>
+        <p><strong>Order Time:</strong> <span th:text="${order.orderTime}">2025-01-01T10:00</span></p>
+        <p><strong>Delivery Mode:</strong> <span th:text="${order.deliveryMode}">DELIVERY</span></p>
+    </div>
+
+    <h3>Items</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>Item Name</th>
+            <th>Size</th>
+            <th>Veg</th>
+            <th>Quantity</th>
+            <th>Item Price</th>
+            <th>Line Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${items}">
+            <td th:text="${item.menuItem != null ? item.menuItem.name : 'N/A'}">Margherita</td>
+            <td th:text="${item.menuItem != null ? item.menuItem.size : ''}">Medium</td>
+            <td>
+                <span th:if="${item.menuItem != null && item.menuItem.veg}">VEG</span>
+                <span th:if="${item.menuItem != null && !item.menuItem.veg}">NON-VEG</span>
+            </td>
+            <td th:text="${item.quantity}">1</td>
+            <td th:text="${item.itemPrice}">0.00</td>
+            <td th:text="${item.lineTotal}">0.00</td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(items)}">
+            <td colspan="6">No items for this order.</td>
+        </tr>
+        <tr class="total-row">
+            <td colspan="5">Total Amount</td>
+            <td th:text="${order.totalAmount}">0.00</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="payment-section">
+        <h3>Payment</h3>
+        <p th:if="${payment == null}">
+            No payment information available.
+        </p>
+        <div th:if="${payment != null}">
+            <p><strong>Mode:</strong> <span th:text="${payment.paymentMode}">CASH</span></p>
+            <p><strong>Status:</strong> <span th:text="${payment.paymentStatus}">PENDING</span></p>
+            <p><strong>Amount:</strong> <span th:text="${payment.amount}">0.00</span></p>
+            <p><strong>Transaction Id:</strong> <span th:text="${payment.transactionId}">TXN123</span></p>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button onclick="window.print()" class="btn-print">🖨️ Print Bill</button>
+
+        <form th:action="@{'/admin/orders/' + ${order.id} + '/complete'}" method="post">
+            <button type="submit" class="btn-complete">Mark Completed</button>
+        </form>
+
+        <form th:action="@{'/admin/orders/' + ${order.id} + '/cancel'}" method="post">
+            <button type="submit" class="btn-cancel"
+                    onclick="return confirm('Are you sure you want to cancel this order?');">
+                Cancel Order
+            </button>
+        </form>
+
+        <a th:href="@{/admin/orders}" class="btn-back">Back to Orders</a>
+    </div>
+</div>
+
+<footer>
+    &copy; 2025 Pizza Store - Admin Panel
+</footer>
+</body>
+</html>

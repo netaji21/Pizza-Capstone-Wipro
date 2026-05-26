@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Pizza Store</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<div class="container auth-box">
+    <div class="card">
+        <h2 style="text-align:center; color: var(--primary-blue);">Welcome Back</h2>
+        <p style="text-align:center; color: #666; margin-bottom: 30px;">Login to order your favorite pizza</p>
+
+        <div th:if="${param.error}" class="alert alert-error" th:text="${param.error}">Invalid credentials</div>
+        <div th:if="${param.msg}" class="alert alert-success" th:text="${param.msg}">Message</div>
+
+        <form onsubmit="return validateLogin(this)" method="post" th:action="@{/customers/login}">
+            <label for="email">Email Address</label>
+            <input id="email" name="email" type="email" placeholder="e.g. user@example.com" required />
+
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" required />
+
+            <button class="btn btn-primary btn-block" type="submit">LOGIN</button>
+        </form>
+
+        <div style="text-align:center; margin-top:20px; font-size:14px;">
+            New here? <a th:href="@{/customers/register}" style="color:var(--primary-blue); font-weight:bold;">Create an account</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function validateLogin(form) {
+        if (!form.email.value.trim() || !form.password.value) {
+            alert('Please enter both email and password.');
+            return false;
+        }
+        return true;
+    }
+</script>
+</body>
+</html>

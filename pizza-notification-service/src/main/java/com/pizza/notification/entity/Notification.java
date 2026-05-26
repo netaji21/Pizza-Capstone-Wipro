@@ -1,0 +1,54 @@
+package com.pizza.notification.entity;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "notifications")
+public class Notification {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private Long orderId; // Logical link to Order
+
+    private String recipientEmail;
+
+    private String subject;
+
+    @Column(length = 1000)
+    private String message;
+
+    private LocalDateTime sentAt;
+
+    public Notification() {
+    }
+
+    public Notification(Long orderId, String recipientEmail, String subject, String message) {
+        this.orderId = orderId;
+        this.recipientEmail = recipientEmail;
+        this.subject = subject;
+        this.message = message;
+        this.sentAt = LocalDateTime.now();
+    }
+
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Long getOrderId() { return orderId; }
+    public void setOrderId(Long orderId) { this.orderId = orderId; }
+
+    public String getRecipientEmail() { return recipientEmail; }
+    public void setRecipientEmail(String recipientEmail) { this.recipientEmail = recipientEmail; }
+
+    public String getSubject() { return subject; }
+    public void setSubject(String subject) { this.subject = subject; }
+
+    public String getMessage() { return message; }
+    public void setMessage(String message) { this.message = message; }
+
+    public LocalDateTime getSentAt() { return sentAt; }
+    public void setSentAt(LocalDateTime sentAt) { this.sentAt = sentAt; }
+}

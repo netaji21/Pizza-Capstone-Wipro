@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Details</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .detail-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; }
+        .detail-row:last-child { border-bottom: none; }
+        .timeline { margin-top: 30px; padding-top: 20px; border-top: 2px solid #f2f2f2; }
+        .timeline-item { position: relative; padding-left: 20px; margin-bottom: 15px; border-left: 3px solid var(--primary-blue); }
+        .timeline-date { font-size: 12px; color: #999; }
+        .timeline-subject { font-weight: 700; color: var(--primary-blue); }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🍕 Pizza Store</h1>
+    <nav>
+        <a href="/customers/home">Home</a>
+        <a href="/customers/menu">Menu</a>
+        <a href="/customers/cart">Cart</a>
+        <a href="/customers/orders" style="text-decoration: underline;">My Orders</a>
+        <a href="/customers/logout">Logout</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+        
+        <div style="flex: 2; min-width: 300px;">
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+                    <h2 style="margin:0; color: var(--primary-blue);">Order <span th:text="${order.orderNumber}">ORD-XXXX</span></h2>
+                    <span class="badge" 
+                          th:text="${order.status}"
+                          th:style="${order.status == 'COMPLETED' ? 'background:#e8f5e9; color:#2e7d32' : (order.status == 'CANCELLED' ? 'background:#ffebee; color:#c62828' : 'background:#e3f2fd; color:#0d47a1')}">
+                    </span>
+                </div>
+
+                <div class="detail-row"><span>Order Date:</span> <strong th:text="${order.orderTime}"></strong></div>
+                <div class="detail-row"><span>Delivery Mode:</span> <strong th:text="${order.deliveryMode}"></strong></div>
+                <div class="detail-row"><span>Payment Mode:</span> <strong th:text="${order.paymentMode}"></strong></div>
+                <div class="detail-row"><span>Payment Status:</span> <strong th:text="${order.paymentStatus}"></strong></div>
+
+                <h3 style="margin-top: 25px;">Items</h3>
+                <table class="styled-table">
+                    <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="i : ${order.items}">
+                        <td th:text="${i.itemName}"></td>
+                        <td>₹<span th:text="${i.price}"></span></td>
+                        <td th:text="${i.quantity}"></td>
+                        <td>₹<span th:text="${i.lineTotal}"></span></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div style="text-align: right; margin-top: 20px; font-size: 18px;">
+                    Total: <strong style="color: var(--primary-blue);">₹<span th:text="${order.totalAmount}"></span></strong>
+                </div>
+
+                <div style="margin-top: 30px;" th:if="${order.status == 'NEW'}">
+                    <form th:action="@{/customers/orders/details/cancel/{id}(id=${order.id})}" method="post">
+                        <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure?');">Cancel Order</button>
+                    </form>
+                </div>
+            </div>
+            
+            <a href="/customers/orders" class="btn btn-secondary" style="margin-top: 10px;">&larr; Back to My Orders</a>
+        </div>
+
+        <div style="flex: 1; min-width: 250px;">
+            <div class="card">
+                <h3>Order Status</h3>
+                
+                <div class="timeline" th:if="${!#lists.isEmpty(notifications)}">
+                    <div th:each="note : ${notifications}" class="timeline-item">
+                        <div class="timeline-subject" th:text="${note.subject}">Subject</div>
+                        <div class="timeline-date" th:text="${note.sentAt}">Date</div>
+                        <div style="font-size: 13px; margin-top: 4px;" th:text="${note.message}">Message</div>
+                    </div>
+                </div>
+
+                <div th:if="${#lists.isEmpty(notifications)}" style="color: #999; font-style: italic; margin-top: 20px;">
+                    No updates yet.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<footer>&copy; 2025 Pizza Store</footer>
+</body>
+</html>
