@@ -200,10 +200,6 @@ Login: user `sa`, no password.
 
 ---
 
-## License
-
-MIT — see [LICENSE](LICENSE).
-
 ## Author
 
 **Netaji Meka** · [nsm325@lehigh.edu](mailto:nsm325@lehigh.edu)
